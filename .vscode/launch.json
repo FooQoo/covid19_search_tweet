@@ -8,13 +8,11 @@
             "name": "Python: main.py",
             "type": "python",
             "request": "launch",
-            "program": "src/get_tweet.py",
+            "program": "src/main.py",
             "console": "integratedTerminal",
             "args": [
                 "--config",
-                "src/resources/twitter.json",
-                "--output",
-                "./ff.csv"
+                "src/resources/.env"
             ]
         }
     ]

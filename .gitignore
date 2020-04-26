@@ -1,3 +1,6 @@
 .venv
 __pycache__
 twitter.json
+putEnv.sh
+env.yaml
+.env

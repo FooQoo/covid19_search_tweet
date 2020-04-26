@@ -1,4 +1,4 @@
-from .tweepy_wrapper import TweepyWrapper
+from .tweet import TweetAPI
 from .api_config import ApiConfig
 
-__all__ = ['TweepyWrapper', 'ApiConfig']
+__all__ = ['TweetAPI', 'ApiConfig']
