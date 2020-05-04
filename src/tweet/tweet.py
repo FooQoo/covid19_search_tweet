@@ -27,7 +27,7 @@ class TweetAPI:
 
     def __convert_to_dict(self, tweet):
         return {
-            'id': tweet.id,
+            'id_str': tweet.id,
             'hashtags': [tag['text'] for tag in tweet.entities['hashtags']],
             'created_at': tweet.created_at.timestamp()
         }
