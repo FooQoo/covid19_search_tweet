@@ -20,19 +20,19 @@ $ poetry shell
 ## deploy
 
 ```get_tweet
-gcloud beta functions deploy get_tweet --entry-point=get_tweet --trigger-topic=tweet --env-vars-file=env.yaml --source=src --runtime=python37
+gcloud beta functions deploy get_tweet --entry-point=get_tweet --trigger-topic=datastore --env-vars-file=env.yaml --source=src --runtime=python37
 ```
 
 ```get_rss
-gcloud beta functions deploy get_rss --entry-point=get_rss --trigger-topic=tweet --source=src --runtime=python37
+gcloud beta functions deploy get_rss --entry-point=get_rss --trigger-topic=datastore --source=src --runtime=python37
 ```
 
 ## スケジュール
 
 ```
-gcloud scheduler jobs create pubsub fetchTweet \
-  --topic tweet \
-  --message-body='fetch tweet' \
+gcloud scheduler jobs create pubsub feeder \
+  --topic datastore \
+  --message-body='fetch info' \
   --schedule '*/5 * * * *' \
   --time-zone='Asia/Tokyo'
 ```

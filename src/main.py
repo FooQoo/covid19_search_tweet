@@ -1,8 +1,9 @@
-from tweet import TweetAPI
-from tweet import ApiConfig
-from rss import RssAPI
+from tweet import TweetAPI, ApiConfig
+from rss import RssAPI, PaperAPI
 from datastore import TweetDataStore, RssDataStore
 from dotenv import load_dotenv
+from bs4 import BeautifulSoup
+import re
 
 config = 'src/resources/.env'
 
@@ -40,15 +41,28 @@ def get_tweet(event, context):
 
 
 def get_rss(event, context):
+    def is_covid_article(html):
+        if html == "":
+            return False
+
+        soup = BeautifulSoup(html, 'html.parser')
+        context = ' '.join(
+            [i.p.text for i in
+             soup.find_all('div', {'class': 'article-body'})])
+        return re.search(r'コロナ|感染', context) is not None
+
     load_dotenv(config, verbose=True)
 
     rss_datastore = RssDataStore()
-
-    wrapper = RssAPI()
+    wrapper, paper_api = RssAPI(), PaperAPI()
 
     rss_docs = wrapper.fetch_rss()
 
-    rss_datastore.insert_rss_docs(rss_docs)
+    filtered_rss_docs = [
+        doc for doc in rss_docs
+        if is_covid_article(paper_api.fetch_paper(doc['link']))]
+
+    rss_datastore.insert_rss_docs(filtered_rss_docs)
 
 
 if __name__ == "__main__":
