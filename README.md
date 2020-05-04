@@ -36,3 +36,9 @@ gcloud scheduler jobs create pubsub feeder \
   --schedule '*/5 * * * *' \
   --time-zone='Asia/Tokyo'
 ```
+
+## export requirements.txt
+
+```
+poetry export -f requirements.txt --without-hashes
+```
