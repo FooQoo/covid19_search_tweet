@@ -52,5 +52,5 @@ def get_rss(event, context):
 
 
 if __name__ == "__main__":
-    #get_tweet(None, None)
+    get_tweet(None, None)
     get_rss(None, None)

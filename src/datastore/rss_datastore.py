@@ -19,7 +19,7 @@ class RssDataStore:
         for doc in rss_docs:
             entitie_id = hashlib.sha256((doc['link']).encode()).hexdigest()
             task = datastore.Entity(
-                self.client.key('fukuishimbun', entitie_id))
+                self.client.key('rss', entitie_id))
             task.update({
                 'title': doc['title'],
                 'link': doc['link'],

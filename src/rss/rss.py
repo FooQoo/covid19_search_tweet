@@ -15,15 +15,18 @@ class RssAPI:
         try:
             r = requests.get(self.RSS_PATH, timeout=(3.0, 7.5))
             r.raise_for_status()
+            parsed_xml = [
+                {j.tag: j.text for j in i}
+                for i in ET.fromstring(r.text).findall('./channel/item')
+            ]
+            return [self.__convert_to_dict(doc) for doc in parsed_xml]
+
         except Timeout:
             print(traceback.print_exc())
         except HTTPError:
             print(traceback.print_exc())
 
-        parsed_xml = [{j.tag: j.text for j in i}
-                      for i in ET.fromstring(r.text).findall('./channel/item')]
-
-        return [self.__convert_to_dict(doc) for doc in parsed_xml]
+        return []
 
     def __convert_to_dict(self, doc):
         return {
