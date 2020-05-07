@@ -8,7 +8,7 @@ class PaperAPI:
     def fetch_paper(self, url):
 
         try:
-            r = requests.get(url, timeout=(3.0, 7.5))
+            r = requests.get(url)
             r.raise_for_status()
 
             return r.text

@@ -4,6 +4,7 @@ from datastore import TweetDataStore, RssDataStore
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 import re
+from time import sleep
 
 config = 'src/resources/.env'
 
@@ -51,6 +52,9 @@ def get_rss(event, context):
              soup.find_all('div', {'class': 'article-body'})])
         return re.search(r'コロナ|感染', context) is not None
 
+    def is_covid_title(title):
+        return re.search(r'コロナ|感染', title) is not None
+
     load_dotenv(config, verbose=True)
 
     rss_datastore = RssDataStore()
@@ -58,13 +62,15 @@ def get_rss(event, context):
 
     rss_docs = wrapper.fetch_rss()
 
-    filtered_rss_docs = [
-        doc for doc in rss_docs
-        if is_covid_article(paper_api.fetch_paper(doc['link']))]
+    filtered_rss_docs = []
+    for doc in rss_docs:
+        if (is_covid_article(paper_api.fetch_paper(doc['link'])) or
+                is_covid_title(doc['title'])):
+            filtered_rss_docs.append(doc)
 
     rss_datastore.insert_rss_docs(filtered_rss_docs)
 
 
 if __name__ == "__main__":
-    get_tweet(None, None)
+    #get_tweet(None, None)
     get_rss(None, None)

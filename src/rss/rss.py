@@ -2,8 +2,7 @@ import requests
 from requests.exceptions import Timeout, HTTPError
 import traceback
 import xml.etree.ElementTree as ET
-from email.utils import parsedate
-from time import mktime
+from email.utils import parsedate_tz, mktime_tz
 
 
 class RssAPI:
@@ -13,7 +12,7 @@ class RssAPI:
     def fetch_rss(self):
 
         try:
-            r = requests.get(self.RSS_PATH, timeout=(3.0, 7.5))
+            r = requests.get(self.RSS_PATH)
             r.raise_for_status()
             parsed_xml = [
                 {j.tag: j.text for j in i}
@@ -32,5 +31,5 @@ class RssAPI:
         return {
             'link': doc['link'],
             'title': doc['title'],
-            'published_at': mktime(parsedate(doc['pubDate']))
+            'published_at': int(mktime_tz(parsedate_tz(doc['pubDate'])))
         }
